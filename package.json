@@ -2,7 +2,7 @@
   "name": "farmland",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://bhargavabhiram1999.github.io/farmland",
+  "homepage": "https://bhargavabhiram1999.github.io/Farmland",
   "dependencies": {
     "@supabase/supabase-js": "^2.49.1",
     "@testing-library/dom": "^10.4.0",
