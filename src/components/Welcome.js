@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import FarmLandNavBar from "./FarmLandNavBar";
-import FetchData from "./FetchData";
 import DisplayMaterialInfo from "./DisplayMaterialInfo";
 
 function Welcome() {
