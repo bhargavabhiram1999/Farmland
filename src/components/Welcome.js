@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import FarmLandNavBar from "./FarmLandNavBar";
 import DisplayMaterialInfo from "./DisplayMaterialInfo";
+import MaterialUpdate from "./MaterialUpdate"
 
 function Welcome() {
   const { username } = useParams();
@@ -27,6 +28,7 @@ function Welcome() {
       
       <div style={{ paddingTop: "60px" }}>
       <DisplayMaterialInfo />
+      <MaterialUpdate />
       {/* <FetchData /> */}
       </div>
     </div>
