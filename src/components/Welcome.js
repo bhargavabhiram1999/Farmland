@@ -8,6 +8,7 @@ function Welcome() {
   const { username } = useParams();
   const navigate = useNavigate();
   const [user, setUser] = useState(null);
+  const [activeSection, setActiveSection] = useState("materialData");
 
   useEffect(() => {
     const storedUser = JSON.parse(localStorage.getItem("user"));
@@ -24,11 +25,11 @@ function Welcome() {
 
   return (
     <div style={{ textAlign: "center", marginTop: "0px" }}>
-      <FarmLandNavBar />
+      <FarmLandNavBar setActiveSection={setActiveSection}/>
       
-      <div style={{ paddingTop: "60px" }}>
-      <DisplayMaterialInfo />
-      <MaterialUpdate />
+      <div style={{ paddingTop: "100px" }}>
+      {activeSection === "stockData" && <DisplayMaterialInfo />}
+        {activeSection === "materialData" && <MaterialUpdate />}
       {/* <FetchData /> */}
       </div>
     </div>

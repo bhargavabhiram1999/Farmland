@@ -4,7 +4,7 @@ import Navbar from 'react-bootstrap/Navbar';
 import Button from 'react-bootstrap/Button';
 import { useNavigate } from "react-router-dom";
 
-function FarmLandNavBar() {
+function FarmLandNavBar({ setActiveSection }) {
   const navigate = useNavigate();
   return (
     <>
@@ -12,20 +12,29 @@ function FarmLandNavBar() {
         <Container>
           <Navbar.Brand href="#home">Farm Tracker</Navbar.Brand>
           <Nav className="me-auto">
-            <Nav.Link href="#materialData">Material Data</Nav.Link>
-            <Nav.Link href="#stockData">Stock Data</Nav.Link>
-            <Nav.Link href="#updateStock">Update Material Data</Nav.Link>
+            <Nav.Link onClick={() => setActiveSection("materialData")}>
+              Update Material Data
+            </Nav.Link>
+            <Nav.Link onClick={() => setActiveSection("stockData")}>
+              Stock Data
+            </Nav.Link>
           </Nav>
           <Nav>
-            <Nav.Link href="#deets"><Button variant="light" onClick={() => { 
-        localStorage.removeItem("user"); 
-        navigate("/"); 
-      }}>Log out</Button></Nav.Link>
+            <Nav.Link>
+              <Button
+                variant="light"
+                onClick={() => {
+                  localStorage.removeItem("user");
+                  navigate("/");
+                }}
+              >
+                Log out
+              </Button>
+            </Nav.Link>
           </Nav>
         </Container>
       </Navbar>
       <br />
-      
     </>
   );
 }

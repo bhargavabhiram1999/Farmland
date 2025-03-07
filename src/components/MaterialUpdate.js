@@ -24,13 +24,14 @@ const MaterialUpdate = () => {
   const [materials, setMaterials] = useState([]);
   const [selectedMaterial, setSelectedMaterial] = useState(null);
   const [costPerUnit, setCostPerUnit] = useState(0);
+  const [availableQuantity, setAvailableQuantity] = useState(0);
 
   // Fetch materials from Supabase
   useEffect(() => {
     const fetchMaterials = async () => {
       const { data, error } = await supabase
         .from("stock")
-        .select("material_name, cost_per_unit");
+        .select("material_name, cost_per_unit, available_quantity");
       if (error) {
         console.error("Error fetching materials:", error);
       } else {
@@ -46,8 +47,9 @@ const MaterialUpdate = () => {
     if (newValue) {
       setFormData({ ...formData, materialName: newValue.material_name });
 
-      // Update cost_per_unit based on selection
+      // Update cost_per_unit and available_quantity based on selection
       setCostPerUnit(newValue.cost_per_unit || 0);
+      setAvailableQuantity(newValue.available_quantity || 0);
 
       // Recalculate cost
       const totalQuantity = parseFloat(formData.totalQuantity) || 0;
@@ -77,9 +79,38 @@ const MaterialUpdate = () => {
     setFormData(updatedData);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Form Submitted:", formData);
+
+    if (!formData.materialName || !selectedMaterial) {
+      alert("Please select a material.");
+      return;
+    }
+
+    const usedQuantity = (formData.totalQuantity || 0) / 1000;
+    const newAvailableQuantity = availableQuantity - usedQuantity;
+
+    if (newAvailableQuantity < 0) {
+      alert("Not enough available quantity!");
+      return;
+    }
+
+    try {
+      // Update available_quantity in Supabase
+      const { error } = await supabase
+        .from("stock")
+        .update({ available_quantity: newAvailableQuantity })
+        .eq("material_name", formData.materialName);
+
+      if (error) {
+        console.error("Error updating available quantity:", error);
+        alert("Error updating available quantity.");
+      } else {
+        alert("Available quantity updated successfully!");
+      }
+    } catch (err) {
+      console.error("Unexpected error:", err);
+    }
   };
 
   return (
@@ -157,6 +188,16 @@ const MaterialUpdate = () => {
             variant="outlined"
             margin="normal"
             value={formData.cost}
+            disabled
+          />
+          <TextField
+            fullWidth
+            label="Available Quantity"
+            name="availableQuantity"
+            type="number"
+            variant="outlined"
+            margin="normal"
+            value={availableQuantity.toFixed(2)}
             disabled
           />
           <Button type="submit" variant="contained" color="primary" fullWidth sx={{ mt: 2 }}>
