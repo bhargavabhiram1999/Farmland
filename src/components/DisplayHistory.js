@@ -108,7 +108,7 @@ function DisplayHistory() {
             alignItems: "center", 
             height: "100vh" // Full viewport height
           }}>
-            <Paper style={{ height: 600, width: "50%" }}> 
+            <Paper style={{ height: 600, width: "80%" }}> 
               <TableVirtuoso
                 data={data}
                 components={VirtuosoTableComponents}
