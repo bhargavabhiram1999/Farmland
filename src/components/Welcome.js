@@ -5,12 +5,15 @@ import DisplayMaterialInfo from "./DisplayMaterialInfo";
 import MaterialUpdate from "./MaterialUpdate";
 import supabase from "./supabaseClient";
 import DisplayHistory from "./DisplayHistory";
+import MaterialUpdateTel from "./MaterialUpdateTel";
+import { Button } from "@mui/material";
 
 function Welcome() {
   const { username } = useParams();
   const navigate = useNavigate();
   const [user, setUser] = useState(null);
   const [activeSection, setActiveSection] = useState("materialData");
+  const [isTelugu, setIsTelugu] = useState(true);
 
   useEffect(() => {
     const storedUser = JSON.parse(localStorage.getItem("user"));
@@ -58,8 +61,16 @@ function Welcome() {
       <FarmLandNavBar setActiveSection={setActiveSection} />
       
       <div style={{ paddingTop: "100px" }}>
+      <Button 
+        variant="contained" 
+        color="primary" 
+        onClick={() => setIsTelugu(!isTelugu)}
+        sx={{ mt: 2, mb: 2 }}
+      >
+        {isTelugu ? "Switch to English" : "తెలుగుకు మార్చండి"}
+      </Button>
         {activeSection === "stockData" && <DisplayMaterialInfo />}
-        {activeSection === "materialData" && <MaterialUpdate />}
+        {activeSection === "materialData" && (isTelugu ? <MaterialUpdateTel /> : <MaterialUpdate />)}
         {activeSection === "historyData" && <DisplayHistory />}
       </div>
     </div>
