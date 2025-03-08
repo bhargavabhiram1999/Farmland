@@ -18,6 +18,9 @@ function FarmLandNavBar({ setActiveSection }) {
             <Nav.Link onClick={() => setActiveSection("stockData")}>
               Stock Data
             </Nav.Link>
+            <Nav.Link onClick={() => setActiveSection("historyData")}>
+              History
+            </Nav.Link>
           </Nav>
           <Nav>
             <Nav.Link>

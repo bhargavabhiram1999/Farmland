@@ -4,6 +4,7 @@ import FarmLandNavBar from "./FarmLandNavBar";
 import DisplayMaterialInfo from "./DisplayMaterialInfo";
 import MaterialUpdate from "./MaterialUpdate";
 import supabase from "./supabaseClient";
+import DisplayHistory from "./DisplayHistory";
 
 function Welcome() {
   const { username } = useParams();
@@ -59,6 +60,7 @@ function Welcome() {
       <div style={{ paddingTop: "100px" }}>
         {activeSection === "stockData" && <DisplayMaterialInfo />}
         {activeSection === "materialData" && <MaterialUpdate />}
+        {activeSection === "historyData" && <DisplayHistory />}
       </div>
     </div>
   );

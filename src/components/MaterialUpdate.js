@@ -108,6 +108,20 @@ const MaterialUpdate = () => {
       } else {
         alert("Available quantity updated successfully!");
       }
+
+      const {history_err} = await supabase
+        .from("history")
+        .insert([ // Insert new row
+          {
+            material_name: formData.materialName,
+            quantity_used: formData.totalQuantity,
+            last_updated: new Date().toISOString().split("T")[0] // Sets today's date
+          }
+        ]);
+
+      if (history_err) {
+        console.error("Error while updating history: ", history_err);
+      }
     } catch (err) {
       console.error("Unexpected error:", err);
     }
