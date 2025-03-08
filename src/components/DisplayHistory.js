@@ -1,101 +1,25 @@
 import React, { useEffect, useState } from "react";
 import supabase from "./supabaseClient";
+import Paper from "@mui/material/Paper";
+import Box from "@mui/material/Box";
+import Typography from "@mui/material/Typography";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
-import Paper from "@mui/material/Paper";
-import { TableVirtuoso } from "react-virtuoso";
 
 const columns = [
-  { width: 200, label: "Last Updated", dataKey: "last_updated" },
-  { width: 200, label: "Plantation", dataKey: "plantation" },
-  { width: 200, label: "Material Name", dataKey: "material_name" },
-  { width: 150, label: "Quantity Used", dataKey: "quantity_used", numeric: true },
+  { label: "Plantation", dataKey: "plantation", width: "30%", paddingLeft: "10px" },
+  { label: "Material Name", dataKey: "material_name", width: "40%", paddingLeft: "50px" }, // Fixed alignment
+  { label: "Quantity Used", dataKey: "quantity_used", width: "30%", paddingLeft: "50px", align: "right" }, // Fixed alignment
 ];
-
-const dateColors = ["#f0f8ff", "#f5f5f5", "#e6f7ff"]; // Light alternating colors
-const dateColorMap = {};
-let colorIndex = 0;
 
 function formatDate(dateString) {
   if (!dateString) return "";
   const date = new Date(dateString);
   return date.toLocaleDateString("en-GB", { day: "2-digit", month: "short", year: "2-digit" });
-}
-
-const VirtuosoTableComponents = {
-  Scroller: React.forwardRef((props, ref) => (
-    <TableContainer component={Paper} {...props} ref={ref} />
-  )),
-  Table: (props) => (
-    <Table {...props} stickyHeader sx={{ tableLayout: "fixed", width: "100%" }} />
-  ),
-  TableHead: React.forwardRef((props, ref) => <TableHead {...props} ref={ref} />),
-  TableRow,
-  TableBody: React.forwardRef((props, ref) => <TableBody {...props} ref={ref} />),
-};
-
-function fixedHeaderContent() {
-  return (
-    <TableRow>
-      {columns.map((column) => (
-        <TableCell
-          key={column.dataKey}
-          variant="head"
-          align={column.numeric ? "right" : "left"}
-          sx={{
-            width: column.width,
-            fontWeight: "bold",
-            backgroundColor: "#f5f5f5",
-          }}
-        >
-          {column.label}
-        </TableCell>
-      ))}
-    </TableRow>
-  );
-}
-
-function rowContent(_index, row) {
-    let date = formatDate(row.last_updated);
-    if (!dateColorMap[date]) {
-        dateColorMap[date] = dateColors[colorIndex % dateColors.length];
-        colorIndex++;
-      }
-      let backgroundColor = dateColorMap[date];
-  return (
-    <>
-      {columns.map((column) => {
-        let value = row[column.dataKey];
-        let cellStyle = { width: column.width };
-
-        if (column.dataKey === "last_updated") {
-          value = formatDate(value);
-        }
-
-        if (column.dataKey === "quantity_used") {
-          const isLitre = row.is_litre;
-          if (value < 1000) {
-            value = `${value} ${isLitre ? "ml" : "gr"}`;
-          } else {
-            value = value / 1000;
-            value = `${value} ${isLitre ? "lt" : "kg"}`;
-          }
-          cellStyle.color = "red";
-          cellStyle.fontWeight = "bold";
-        }
-
-        return (
-          <TableCell key={column.dataKey} align={column.numeric ? "right" : "left"} sx={cellStyle}>
-            {value}
-          </TableCell>
-        );
-      })}
-    </>
-  );
 }
 
 function DisplayHistory() {
@@ -112,7 +36,6 @@ function DisplayHistory() {
         const sortedData = data.sort((a, b) => new Date(b.last_updated) - new Date(a.last_updated));
         setHistoryData(sortedData);
       } catch (err) {
-        console.error("Error fetching history data:", err);
         setError(err.message);
       } finally {
         setLoading(false);
@@ -131,13 +54,9 @@ function DisplayHistory() {
         data.forEach((item) => {
           stockLookup[item.material_name] = item.is_litre;
         });
-
         setStockData(stockLookup);
       } catch (err) {
-        console.error("Error fetching stock data:", err);
         setError(err.message);
-      } finally {
-        setLoading(false);
       }
     };
 
@@ -146,24 +65,104 @@ function DisplayHistory() {
 
   if (loading) return <p>Loading data...</p>;
   if (error) return <p>Error: {error}</p>;
-  if (historyData.length === 0) return <p>No History data available.</p>;
+  if (!historyData.length) return <p>No History data available.</p>;
 
   const mergedData = historyData.map((item) => ({
     ...item,
     is_litre: stockData[item.material_name] || false,
   }));
 
+  let lastDate = null;
+
   return (
-    <div style={{ display: "flex", justifyContent: "center", alignItems: "center", height: "100vh" }}>
-      <Paper style={{ height: 600, width: 800 }}>
-        <TableVirtuoso
-          data={mergedData}
-          components={VirtuosoTableComponents}
-          fixedHeaderContent={fixedHeaderContent}
-          itemContent={rowContent}
-        />
+    <Box sx={{ display: "flex", justifyContent: "center", padding: "20px" }}>
+      <Paper sx={{ width: 800, overflow: "hidden", padding: "20px" }}>
+        <Typography variant="h6" sx={{ textAlign: "center", fontWeight: "bold" }}>
+          **History Timeline**
+        </Typography>
+
+        {mergedData.map((row, index) => {
+          const rowDate = formatDate(row.last_updated);
+          const showDateHeader = lastDate !== rowDate;
+          lastDate = rowDate;
+
+          return (
+            <Box key={index} sx={{ marginBottom: "10px" }}>
+              {showDateHeader && (
+                <Box
+                  sx={{
+                    backgroundColor: "#2c3e50",
+                    color: "white",
+                    padding: "8px 15px",
+                    borderRadius: "8px",
+                    fontWeight: "bold",
+                    display: "inline-block",
+                    boxShadow: "2px 2px 10px rgba(0,0,0,0.1)",
+                  }}
+                >
+                  {rowDate}
+                </Box>
+              )}
+              <TableContainer component={Paper} sx={{ marginTop: "5px", borderLeft: "4px solid #3498db" }}>
+                <Table size="small">
+                  {showDateHeader && (
+                    <TableHead>
+                      <TableRow sx={{ backgroundColor: "#ecf0f1" }}>
+                        {columns.map((column) => (
+                          <TableCell
+                            key={column.dataKey}
+                            sx={{
+                              fontWeight: "bold",
+                              width: column.width,
+                              paddingLeft: column.paddingLeft || "10px",
+                              textAlign: column.align || "left",
+                            }}
+                          >
+                            {column.label}
+                          </TableCell>
+                        ))}
+                      </TableRow>
+                    </TableHead>
+                  )}
+                  <TableBody>
+                    <TableRow
+                      sx={{
+                        transition: "background 0.3s",
+                        "&:hover": { backgroundColor: "#f9f9f9" },
+                      }}
+                    >
+                      {columns.map((column) => {
+                        let value = row[column.dataKey];
+
+                        if (column.dataKey === "quantity_used") {
+                          const isLitre = row.is_litre;
+                          value = value < 1000 ? `${value} ${isLitre ? "ml" : "gr"}` : `${value / 1000} ${isLitre ? "lt" : "kg"}`;
+                        }
+
+                        return (
+                            <TableCell
+                            key={column.dataKey}
+                            sx={{
+                              width: column.width,
+                              paddingLeft: column.paddingLeft || "10px",
+                              textAlign: column.align || "left",
+                              color: column.dataKey === "quantity_used" ? "red" : "inherit", // Red color for Quantity Used
+                              fontWeight: column.dataKey === "quantity_used" ? "bold" : "normal", // Bold text for visibility
+                            }}
+                          >
+                            {value}
+                          </TableCell>
+                        );
+                      })}
+                    </TableRow>
+                  </TableBody>
+                </Table>
+              </TableContainer>
+            </Box>
+          );
+        })}
       </Paper>
-    </div>
+    </Box>
   );
 }
 

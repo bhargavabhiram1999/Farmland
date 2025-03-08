@@ -8,14 +8,15 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import { TableVirtuoso } from "react-virtuoso";
+import { Box } from "@mui/material";
 
 // Define columns with fixed widths
 const columns = [
-  { width: 50, label: "ID", dataKey: "id", numeric: true },
+  { width: 50, label: "ID", dataKey: "id" },
   { width: 200, label: "Material Name", dataKey: "material_name" },
-  { width: 100, label: "Pack Qty", dataKey: "pack_quantity", numeric: true },
-  { width: 120, label: "Cost/Unit", dataKey: "cost_per_unit", numeric: true },
-  { width: 150, label: "Available Qty", dataKey: "available_quantity", numeric: true },
+  { width: 100, label: "Pack Qty", dataKey: "pack_quantity" },
+  { width: 120, label: "Cost/Unit", dataKey: "cost_per_unit" },
+  { width: 150, label: "Available Qty", dataKey: "available_quantity" },
   { width: 180, label: "Last Updated", dataKey: "last_updated" }
 ];
 
@@ -28,9 +29,29 @@ const VirtuosoTableComponents = {
     <Table
       {...props}
       sx={{
-        tableLayout: "fixed", // Ensures uniform column spacing
+        tableLayout: "fixed",
         width: "100%",
-        "& td, & th": { padding: "8px 12px" } // Adjust padding for better readability
+        borderCollapse: "separate",
+        borderSpacing: "0 8px", // Spacing between rows
+        "& th": {
+          backgroundColor: "#1C325B", // Dark blue header
+          color: "#fff",
+          fontWeight: "bold",
+          fontSize: "16px",
+          padding: "12px",
+          textAlign: "center"
+        },
+        "& td": {
+          backgroundColor: "#f9f9f9", // Light gray background
+          borderBottom: "1px solid #ddd",
+          padding: "10px", // Reduced padding
+          fontSize: "14px",
+          textAlign: "center"
+        },
+        "& tr:hover td": {
+          backgroundColor: "#e3f2fd", // Light blue hover effect
+          transition: "0.3s"
+        }
       }}
     />
   ),
@@ -47,9 +68,7 @@ function fixedHeaderContent() {
         <TableCell
           key={column.dataKey}
           variant="head"
-          align={column.numeric ? "right" : "left"}
-          style={{ width: column.width }}
-          sx={{ backgroundColor: "background.paper", fontWeight: "bold" }}
+          style={{ width: column.width, textAlign: "center" }}
         >
           {column.label}
         </TableCell>
@@ -75,9 +94,22 @@ function rowContent(_index, row) {
       {columns.map((column) => {
         let value = row[column.dataKey];
 
-        // Format "available_quantity" with units
+        // Format "available_quantity" with units and apply red color if less than 25
         if (column.dataKey === "available_quantity") {
-          value = `${value} ${row.is_litre ? "Lt" : "kg"}`;
+          const quantity = value;
+          value = `${quantity} ${row.is_litre ? "Lt" : "kg"}`;
+          return (
+            <TableCell
+              key={column.dataKey}
+              sx={{
+                fontWeight: "bold",
+                color: quantity < 25 ? "#d32f2f" : "inherit", // Red only if < 25
+                textAlign: "center",
+              }}
+            >
+              {value}
+            </TableCell>
+          );
         }
 
         // Format "last_updated" date
@@ -86,7 +118,12 @@ function rowContent(_index, row) {
         }
 
         return (
-          <TableCell key={column.dataKey} align={column.numeric ? "right" : "left"}>
+          <TableCell
+            key={column.dataKey}
+            sx={{
+              textAlign: "center",
+            }}
+          >
             {value}
           </TableCell>
         );
@@ -130,13 +167,22 @@ export default function DisplayMaterialInfo() {
   if (data.length === 0) return <p>No stock data available.</p>;
 
   return (
-    <Paper style={{ height: 600, width: "100%" }}> {/* Increased height to 600px */}
+    <Box
+      sx={{
+        height: 600,
+        width: "100%",
+        padding: "10px",
+        backgroundColor: "#f0f4f8", // Light gray background
+        borderRadius: "10px",
+        boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.1)"
+      }}
+    >
       <TableVirtuoso
         data={data}
         components={VirtuosoTableComponents}
         fixedHeaderContent={fixedHeaderContent}
         itemContent={rowContent}
       />
-    </Paper>
+    </Box>
   );
 }

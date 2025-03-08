@@ -37,8 +37,8 @@ function Welcome() {
 
         // Check quantity condition and alert only once
         data.forEach((row) => {
-          if (row.available_quantity < 10) {
-            alert(`⚠️ Warning: ${row.material_name} stock is below 10!`);
+          if (row.available_quantity < 25) {
+            alert(`⚠️ Warning: ${row.material_name} stock is below 25!`);
           }
         });
 
