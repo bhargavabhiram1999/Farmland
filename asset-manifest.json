@@ -1,17 +1,17 @@
 {
   "files": {
     "main.css": "/Farmland/static/css/main.9fe40f7c.css",
-    "main.js": "/Farmland/static/js/main.bd1b62fe.js",
+    "main.js": "/Farmland/static/js/main.b5b293d9.js",
     "static/js/952.f1a26353.chunk.js": "/Farmland/static/js/952.f1a26353.chunk.js",
     "static/js/453.5580011c.chunk.js": "/Farmland/static/js/453.5580011c.chunk.js",
     "index.html": "/Farmland/index.html",
     "main.9fe40f7c.css.map": "/Farmland/static/css/main.9fe40f7c.css.map",
-    "main.bd1b62fe.js.map": "/Farmland/static/js/main.bd1b62fe.js.map",
+    "main.b5b293d9.js.map": "/Farmland/static/js/main.b5b293d9.js.map",
     "952.f1a26353.chunk.js.map": "/Farmland/static/js/952.f1a26353.chunk.js.map",
     "453.5580011c.chunk.js.map": "/Farmland/static/js/453.5580011c.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.9fe40f7c.css",
-    "static/js/main.bd1b62fe.js"
+    "static/js/main.b5b293d9.js"
   ]
 }
