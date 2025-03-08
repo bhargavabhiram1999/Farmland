@@ -58,15 +58,39 @@ function fixedHeaderContent() {
   );
 }
 
+const formatDate = (dateString) => {
+  if (!dateString) return ""; // Handle empty values
+  const date = new Date(dateString);
+  return date.toLocaleDateString("en-GB", {
+    day: "2-digit",
+    month: "short",
+    year: "2-digit",
+  });
+};
+
 // Row Content Function
 function rowContent(_index, row) {
   return (
     <>
-      {columns.map((column) => (
-        <TableCell key={column.dataKey} align={column.numeric ? "right" : "left"}>
-          {row[column.dataKey]}
-        </TableCell>
-      ))}
+      {columns.map((column) => {
+        let value = row[column.dataKey];
+
+        // Format "available_quantity" with units
+        if (column.dataKey === "available_quantity") {
+          value = `${value} ${row.is_litre ? "Lt" : "kg"}`;
+        }
+
+        // Format "last_updated" date
+        if (column.dataKey === "last_updated") {
+          value = formatDate(value);
+        }
+
+        return (
+          <TableCell key={column.dataKey} align={column.numeric ? "right" : "left"}>
+            {value}
+          </TableCell>
+        );
+      })}
     </>
   );
 }
@@ -82,7 +106,7 @@ export default function DisplayMaterialInfo() {
       try {
         const { data, error } = await supabase
           .from("stock")
-          .select("id, material_name, pack_quantity, cost_per_unit, available_quantity, last_updated")
+          .select("id, material_name, pack_quantity, cost_per_unit, available_quantity, last_updated,is_litre")
           .order("id", { ascending: true });
 
         if (error) {

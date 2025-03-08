@@ -97,9 +97,10 @@ const MaterialUpdate = () => {
 
     try {
       // Update available_quantity in Supabase
+      
       const { error } = await supabase
         .from("stock")
-        .update({ available_quantity: newAvailableQuantity })
+        .update({ available_quantity: newAvailableQuantity, last_updated: new Date().toISOString().split("T")[0] })
         .eq("material_name", formData.materialName);
 
       if (error) {
@@ -115,7 +116,8 @@ const MaterialUpdate = () => {
           {
             material_name: formData.materialName,
             quantity_used: formData.totalQuantity,
-            last_updated: new Date().toISOString().split("T")[0] // Sets today's date
+            plantation : formData.plantation,
+            last_updated: formData.date // Sets today's date
           }
         ]);
 
@@ -175,7 +177,7 @@ const MaterialUpdate = () => {
           />
           <TextField
             fullWidth
-            label="Quantity Used per Liter"
+            label="Quantity Used per Liter (in ml / gr)"
             name="quantityPerLiter"
             type="number"
             variant="outlined"
