@@ -1,17 +1,17 @@
 {
   "files": {
-    "main.css": "/Farmland/static/css/main.9fe40f7c.css",
-    "main.js": "/Farmland/static/js/main.ad33fd9c.js",
+    "main.css": "/Farmland/static/css/main.24ba1c18.css",
+    "main.js": "/Farmland/static/js/main.b92f2f40.js",
     "static/js/952.f1a26353.chunk.js": "/Farmland/static/js/952.f1a26353.chunk.js",
     "static/js/453.5580011c.chunk.js": "/Farmland/static/js/453.5580011c.chunk.js",
     "index.html": "/Farmland/index.html",
-    "main.9fe40f7c.css.map": "/Farmland/static/css/main.9fe40f7c.css.map",
-    "main.ad33fd9c.js.map": "/Farmland/static/js/main.ad33fd9c.js.map",
+    "main.24ba1c18.css.map": "/Farmland/static/css/main.24ba1c18.css.map",
+    "main.b92f2f40.js.map": "/Farmland/static/js/main.b92f2f40.js.map",
     "952.f1a26353.chunk.js.map": "/Farmland/static/js/952.f1a26353.chunk.js.map",
     "453.5580011c.chunk.js.map": "/Farmland/static/js/453.5580011c.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.9fe40f7c.css",
-    "static/js/main.ad33fd9c.js"
+    "static/css/main.24ba1c18.css",
+    "static/js/main.b92f2f40.js"
   ]
 }
