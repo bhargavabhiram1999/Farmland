@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom"; 
 import supabase from "./supabaseClient";
+import "./Auth.css";  // ✅ Import the styles file
 
 function Auth() {
   const [username, setUsername] = useState("");
@@ -32,27 +33,30 @@ function Auth() {
   };
 
   return (
-    <div style={{ textAlign: "center", marginTop: "50px" }}>
-      <h2>Login</h2>
-      <input
-        type="text"
-        placeholder="Username"
-        value={username}
-        onChange={(e) => setUsername(e.target.value)}
-      />
-      <br />
-      <input
-        type="password"
-        placeholder="Password"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-      />
-      <br />
-      <button onClick={handleLogin} disabled={loading}>
-        Login
-      </button>
-      
-      <p>{message}</p>
+    <div className="auth-container">
+      <div className="auth-card">
+        <h2>Login</h2>
+        <input
+          type="text"
+          placeholder="Username"
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
+          className="auth-input"
+        />
+        <input
+          type="password"
+          placeholder="Password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          className="auth-input"
+        />
+        <button onClick={handleLogin} disabled={loading} className="auth-button">
+          {loading ? <span className="loader"></span> : "Login"}
+        </button>
+        <p className={`auth-message ${message.includes("Invalid") ? "error" : "success"}`}>
+          {message}
+        </p>
+      </div>
     </div>
   );
 }
